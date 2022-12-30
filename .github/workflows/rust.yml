@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  linux_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Prep
+      run: sudo apt-get install libasound-dev -y
+      
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build --release
+
+    - shell: bash
+      run: |
+        mv target/release/snake snake
+        chmod 777 snake
+        tar cpfz snake_linux_x86_64.tar.gz snake assets
+        
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: snake_linux_x86_64.tar.gz
+
+  win_build:
+    runs-on: windows-latest
+    steps:
+    - name: Install rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        target: x86_64-pc-windows-msvc
+        override: true
+
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build --release
+
+    - shell: bash
+      run: |
+        mv target/release/snake snake
+        7z a snake_windows_x86_64.zip snake.exe assets
+        
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: snake_windows_x86_64.zip
