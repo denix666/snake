@@ -179,26 +179,26 @@ impl Snake {
 
         match self.dir {
             Dir::Up => {
-                self.y -= 30.0;
+                self.y -= resources::BLOCKSIZE;
                 if self.y < 0.0 {
-                    self.y = 570.0
+                    self.y = resources::RES_WIDTH as f32 - resources::BLOCKSIZE;
                 }
             },
             Dir::Down => {
-                self.y += 30.0;
-                if self.y > 570.0 {
+                self.y += resources::BLOCKSIZE;
+                if self.y > resources::RES_WIDTH as f32 - resources::BLOCKSIZE {
                     self.y = 0.0
                 }
             },
             Dir::Left => {
-                self.x -= 30.0;
+                self.x -= resources::BLOCKSIZE;
                 if self.x < 0.0 {
-                    self.x = 570.0
+                    self.x = resources::RES_WIDTH as f32 - resources::BLOCKSIZE;
                 }
             },
             Dir::Right => {
-                self.x += 30.0;
-                if self.x > 570.0 {
+                self.x += resources::BLOCKSIZE;
+                if self.x > resources::RES_WIDTH as f32 - resources::BLOCKSIZE {
                     self.x = 0.0
                 }
             },

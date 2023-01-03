@@ -25,6 +25,7 @@ pub struct Resources {
     pub angel_right_down: Texture2D,
     pub angel_right_up: Texture2D,
     pub apple: Texture2D,
+    pub font: Font,
 }
 
 impl Resources {
@@ -47,6 +48,7 @@ impl Resources {
             angel_right_down: load_texture("assets/images/angel_right_down.png").await.unwrap(),
             angel_right_up: load_texture("assets/images/angel_right_up.png").await.unwrap(),
             apple: load_texture("assets/images/apple.png").await.unwrap(),
+            font: load_ttf_font("assets/fonts/game_font.ttf").await.unwrap(),
         }
     }
 }
