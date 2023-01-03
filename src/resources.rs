@@ -4,7 +4,8 @@ use macroquad::prelude::*;
 pub const RES_WIDTH: i32 = 600;
 pub const RES_HEIGHT: i32 = 600;
 
-pub const THREAD_SLEEP: u64 = 160;
+pub const BLOCKSIZE: f32 = 30.0;
+pub const UPDATE_TIME: f64 = 0.1;
 
 pub struct Resources {
     pub grid: Texture2D,
@@ -23,6 +24,7 @@ pub struct Resources {
     pub angel_left_up: Texture2D,
     pub angel_right_down: Texture2D,
     pub angel_right_up: Texture2D,
+    pub apple: Texture2D,
 }
 
 impl Resources {
@@ -44,6 +46,7 @@ impl Resources {
             angel_left_up: load_texture("assets/images/angel_left_up.png").await.unwrap(),
             angel_right_down: load_texture("assets/images/angel_right_down.png").await.unwrap(),
             angel_right_up: load_texture("assets/images/angel_right_up.png").await.unwrap(),
+            apple: load_texture("assets/images/apple.png").await.unwrap(),
         }
     }
 }
