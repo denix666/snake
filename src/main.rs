@@ -18,6 +18,9 @@ use apple::Apple;
 mod body;
 use body::Body;
 
+mod game;
+use game::Game;
+
 fn window_conf() -> Conf {
     let mut title = String::from("Snake v");
     title.push_str(env!("CARGO_PKG_VERSION"));
@@ -32,13 +35,51 @@ fn window_conf() -> Conf {
     }
 }
 
+fn draw_info(font: Font, score: &str, hi_score: &str) {
+    draw_text_ex("SCORE: ", 30.0, 635.0, 
+        TextParams {
+            font,
+            font_size: 35,
+            color: WHITE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex(score, 190.0, 635.0, 
+        TextParams {
+            font,
+            font_size: 35,
+            color: ORANGE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex("HI-SCORE: ", 290.0, 635.0, 
+        TextParams {
+            font,
+            font_size: 35,
+            color: WHITE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex(hi_score, 520.0, 635.0, 
+        TextParams {
+            font,
+            font_size: 35,
+            color: ORANGE,
+            ..Default::default()
+        },
+    );
+}
+
 fn show_text(font: Font, header_text: &str, message_text: &str) {
-    let header_dims = measure_text(header_text, Some(font), 70, 1.0);
-    let message_dims = measure_text(message_text, Some(font), 20, 1.0);
+    //let header_dims = measure_text(header_text, Some(font), 70, 1.0);
+    //let message_dims = measure_text(message_text, Some(font), 20, 1.0);
 
     draw_text_ex(
         &header_text,
-        screen_width() * 0.5 - header_dims.width * 0.5,
+        57.0,
         240.0,
         TextParams {
             font,
@@ -50,7 +91,7 @@ fn show_text(font: Font, header_text: &str, message_text: &str) {
 
     draw_text_ex(
         &message_text,
-        screen_width() * 0.5 - message_dims.width * 0.5,
+        60.0,
         280.0,
         TextParams {
             font,
@@ -80,15 +121,18 @@ async fn main() {
     let mut game_state = GameState::Intro;
     let mut snake = Snake::new(&resources).await;
     let mut apples: Vec<Apple> = Vec::new();
+    let mut game = Game::new().await;
 
     loop {
         clear_background(BLACK);
         
         match game_state {
             GameState::Intro=>{
+                game.hi_score = 0;
                 game_state = GameState::InitLevel;
             },
             GameState::InitLevel => {
+                game.score = 0;
                 apples.clear();
                 snake.body_parts.clear();
                 snake = Snake::new(&resources).await;
@@ -96,12 +140,16 @@ async fn main() {
                     Apple::new(90.0, 300.0, &resources).await,
                 );
                 snake.body_parts.push_front(
-                    Body::new(snake.prev_x, snake.prev_y, "tail_right".to_string()),
+                    Body::new(120.0, 300.0, "tail_right".to_string()),
+                );
+                snake.body_parts.push_front(
+                    Body::new(150.0, 300.0, "tail_right".to_string()),
                 );
                 game_state = GameState::Game;
             },
             GameState::Game => {
                 draw_map(&resources);
+                draw_info(resources.font, game.score.to_string().as_str(), game.hi_score.to_string().as_str());
 
                 snake.update();
 
@@ -117,6 +165,7 @@ async fn main() {
                     if apple.x == snake.x && apple.y == snake.y {
                         apple.destroyed = true;
                         snake.got_food = true;
+                        game.score += 1;
                     }
                 }
 
@@ -147,13 +196,18 @@ async fn main() {
                     }
                 }
 
+                if game.score > game.hi_score {
+                    game.hi_score = game.score;
+                }
+
                 snake.draw();
             },
             GameState::LevelFail => {
                 draw_map(&resources);
+                draw_info(resources.font, game.score.to_string().as_str(), game.hi_score.to_string().as_str());
                 snake.draw();
 
-                show_text(resources.font, "Game over", "Press 'space' to start new game...");
+                show_text(resources.font, "Game over", "Press  'space'  to  start  new  game...");
 
                 if is_key_pressed(KeyCode::Space) {
                     game_state = GameState::InitLevel;

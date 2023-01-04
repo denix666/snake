@@ -2,7 +2,11 @@ use macroquad::prelude::*;
 
 // window size in pixels
 pub const RES_WIDTH: i32 = 600;
-pub const RES_HEIGHT: i32 = 600;
+pub const RES_HEIGHT: i32 = 650;
+
+// playable field size in pixels
+pub const FIELD_WIDTH: f32 = 600.0;
+pub const FIELD_HEIGHT: f32 = 600.0;
 
 pub const BLOCKSIZE: f32 = 30.0;
 pub const UPDATE_TIME: f64 = 0.1;

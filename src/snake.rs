@@ -181,24 +181,24 @@ impl Snake {
             Dir::Up => {
                 self.y -= resources::BLOCKSIZE;
                 if self.y < 0.0 {
-                    self.y = resources::RES_WIDTH as f32 - resources::BLOCKSIZE;
+                    self.y = resources::FIELD_HEIGHT - resources::BLOCKSIZE;
                 }
             },
             Dir::Down => {
                 self.y += resources::BLOCKSIZE;
-                if self.y > resources::RES_WIDTH as f32 - resources::BLOCKSIZE {
+                if self.y > resources::FIELD_HEIGHT - resources::BLOCKSIZE {
                     self.y = 0.0
                 }
             },
             Dir::Left => {
                 self.x -= resources::BLOCKSIZE;
                 if self.x < 0.0 {
-                    self.x = resources::RES_WIDTH as f32 - resources::BLOCKSIZE;
+                    self.x = resources::FIELD_WIDTH - resources::BLOCKSIZE;
                 }
             },
             Dir::Right => {
                 self.x += resources::BLOCKSIZE;
-                if self.x > resources::RES_WIDTH as f32 - resources::BLOCKSIZE {
+                if self.x > resources::FIELD_WIDTH - resources::BLOCKSIZE {
                     self.x = 0.0
                 }
             },
@@ -213,33 +213,36 @@ impl Snake {
             Dir::Right => {draw_texture(self.head_right_texture, self.x, self.y, WHITE);},
         }
 
+        let last_index = self.body_parts.len() - 1;
+        let mut cur_index: usize = 0;
         for part in &mut self.body_parts {
-            match part.value.to_string().as_str() {
-                "tail_left" => {draw_texture(self.tail_left_texture, part.x, part.y, WHITE);},
-                "tail_right" => {draw_texture(self.tail_right_texture, part.x, part.y, WHITE);},
-                "tail_up" => {draw_texture(self.tail_up_texture, part.x, part.y, WHITE);},
-                "tail_down" => {draw_texture(self.tail_down_texture, part.x, part.y, WHITE);},
-                "body_left" => {draw_texture(self.body_left_texture, part.x, part.y, WHITE);},
-                "body_right" => {draw_texture(self.body_right_texture, part.x, part.y, WHITE);},
-                "body_up" => {draw_texture(self.body_up_texture, part.x, part.y, WHITE);},
-                "body_down" => {draw_texture(self.body_down_texture, part.x, part.y, WHITE);},
-                "angel_left_up" => {draw_texture(self.angel_left_up_texture, part.x, part.y, WHITE);},
-                "angel_left_down" => {draw_texture(self.angel_left_down_texture, part.x, part.y, WHITE);},
-                "angel_right_up" => {draw_texture(self.angel_right_up_texture, part.x, part.y, WHITE);},
-                "angel_right_down" => {draw_texture(self.angel_right_down_texture, part.x, part.y, WHITE);},
-                _ => {}
+            cur_index += 1;
+            if cur_index <= last_index {
+                match part.value.to_string().as_str() {
+                    "tail_left" => {draw_texture(self.tail_left_texture, part.x, part.y, WHITE);},
+                    "tail_right" => {draw_texture(self.tail_right_texture, part.x, part.y, WHITE);},
+                    "tail_up" => {draw_texture(self.tail_up_texture, part.x, part.y, WHITE);},
+                    "tail_down" => {draw_texture(self.tail_down_texture, part.x, part.y, WHITE);},
+                    "body_left" => {draw_texture(self.body_left_texture, part.x, part.y, WHITE);},
+                    "body_right" => {draw_texture(self.body_right_texture, part.x, part.y, WHITE);},
+                    "body_up" => {draw_texture(self.body_up_texture, part.x, part.y, WHITE);},
+                    "body_down" => {draw_texture(self.body_down_texture, part.x, part.y, WHITE);},
+                    "angel_left_up" => {draw_texture(self.angel_left_up_texture, part.x, part.y, WHITE);},
+                    "angel_left_down" => {draw_texture(self.angel_left_down_texture, part.x, part.y, WHITE);},
+                    "angel_right_up" => {draw_texture(self.angel_right_up_texture, part.x, part.y, WHITE);},
+                    "angel_right_down" => {draw_texture(self.angel_right_down_texture, part.x, part.y, WHITE);},
+                    _ => {}
+                }
             }
         }
-        
-        if self.body_parts.len() > 1 {
-            let last_index = self.body_parts.len() - 1;
-            match self.body_parts.back().unwrap().value.to_string().as_str() {
-                "body_up" => {draw_texture(self.tail_up_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
-                "body_down" => {draw_texture(self.tail_down_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
-                "body_left" => {draw_texture(self.tail_left_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
-                "body_right" => {draw_texture(self.tail_right_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
-                _ => {},
-            };
-        }
+
+        let last_index = self.body_parts.len() - 1;
+        match self.body_parts.back().unwrap().value.to_string().as_str() {
+            "body_up" => {draw_texture(self.tail_up_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
+            "body_down" => {draw_texture(self.tail_down_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
+            "body_left" => {draw_texture(self.tail_left_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
+            "body_right" => {draw_texture(self.tail_right_texture, self.body_parts[last_index].x, self.body_parts[last_index].y, WHITE);},
+            _ => {},
+        };
     }
 }
