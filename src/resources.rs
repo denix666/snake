@@ -14,6 +14,7 @@ pub const UPDATE_TIME: f64 = 0.1;
 pub struct Resources {
     pub grid: Texture2D,
     pub bg: Texture2D,
+    pub intro: Texture2D,
     pub head_up: Texture2D,
     pub head_down: Texture2D,
     pub head_left: Texture2D,
@@ -37,6 +38,7 @@ impl Resources {
         Self {
             grid: load_texture("assets/images/grid.png").await.unwrap(),
             bg: load_texture("assets/images/bg.png").await.unwrap(),
+            intro: load_texture("assets/images/intro.png").await.unwrap(),
             head_up: load_texture("assets/images/head_up.png").await.unwrap(),
             head_down: load_texture("assets/images/head_down.png").await.unwrap(),
             head_left: load_texture("assets/images/head_left.png").await.unwrap(),

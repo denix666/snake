@@ -74,9 +74,6 @@ fn draw_info(font: Font, score: &str, hi_score: &str) {
 }
 
 fn show_text(font: Font, header_text: &str, message_text: &str) {
-    //let header_dims = measure_text(header_text, Some(font), 70, 1.0);
-    //let message_dims = measure_text(message_text, Some(font), 20, 1.0);
-
     draw_text_ex(
         &header_text,
         57.0,
@@ -129,7 +126,10 @@ async fn main() {
         match game_state {
             GameState::Intro=>{
                 game.hi_score = 0;
-                game_state = GameState::InitLevel;
+                draw_texture(resources.intro,0.0,0.0,WHITE);
+                if is_key_pressed(KeyCode::Space) {
+                    game_state = GameState::InitLevel;
+                }
             },
             GameState::InitLevel => {
                 game.score = 0;

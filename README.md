@@ -2,8 +2,6 @@
 
 _Snake game written in Rust_
 
->_Game is in a development!_
-
 Commands to build/run:
 
 >_All commands execute from the parent folder (where the "Cargo.toml" file exists)_
@@ -19,3 +17,4 @@ To run:
 cargo run
 ```
 ## Screenshot
+![intro](screenshots/game-play.png)
